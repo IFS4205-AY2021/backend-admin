@@ -1,4 +1,4 @@
-"""subsys_admin URL Configuration
+"""backend URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.1/topics/http/urls/
@@ -14,8 +14,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+
+from user.views import UserViewSet
+
+from rest_framework import routers
+
+rt = routers.DefaultRouter()
+rt.register(r'api/user', UserViewSet)
 
 urlpatterns = [
+    path('', include(rt.urls)),
     path('admin/', admin.site.urls),
 ]
