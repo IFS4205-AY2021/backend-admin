@@ -136,8 +136,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/images/'
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]

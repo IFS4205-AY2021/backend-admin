@@ -1,11 +1,11 @@
 from rest_framework import serializers
 
-from .models import User, Admin, StayHomeRecord
+from .models import UserInfo, Admin, StayHomeRecord
 
-class UserSerializer(serializers.ModelSerializer):
+class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ['name', 'phone', 'age', 'address', 'location', 'test_result', 'encryption_keys']
+        model = UserInfo
+        fields = '__all__'
 
 class RecordSerializer(serializers.ModelSerializer):
     class Meta:
