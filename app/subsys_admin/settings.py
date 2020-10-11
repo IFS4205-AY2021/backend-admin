@@ -27,7 +27,7 @@ SECRET_KEY = os.environ['SECRET']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.1.132']
 CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     
     'rest_framework',
     'corsheaders',
-    'user',
+    'user.apps.UserConfig',
     'oauth',
     'rest_framework_simplejwt.token_blacklist',
 ]

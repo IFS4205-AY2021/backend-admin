@@ -27,7 +27,7 @@ class StayHomeRecord(models.Model):
     videos          = models.TextField(blank=True, null=True)
     documents       = models.TextField(blank=True, null=True)
     def __str__(self):
-        return self.name
+        return str(self.phone)
 
 class Admin(models.Model):
     name            = models.CharField(max_length=64)
@@ -60,3 +60,4 @@ class Record(models.Model):
     address         = models.CharField(max_length=16)
     def __str__(self):
         return self.location
+

@@ -1,0 +1,10 @@
+{% extends 'user/main.html' %} {% load static %} {% block content %}
+
+<form action="" method="POST">
+    {% csrf_token %} {{ form.management_form }} {% for field in form %} {{field.name}}{{field}}
+    <hr> {% endfor %}
+
+    <input type="submit" name="Submit">
+</form>
+
+{% endblock content %}

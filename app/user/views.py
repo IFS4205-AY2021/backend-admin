@@ -16,6 +16,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .decorators import unauthenticated_user, allowed_users, admin_only
+from django.views.decorators.csrf import csrf_exempt 
+
+from .forms import *
 
 class UserViewSet(viewsets.ModelViewSet):
     # authentication_classes = (BasicAuthentication,)
@@ -41,8 +44,7 @@ class RecordViewSet(viewsets.ModelViewSet):
 @login_required(login_url='login')
 @admin_only
 def dashboardPage(request):
-
-    personalInfo = User.objects.all()
+    personalInfo = UserInfo.objects.all()
     records = Record.objects.all()
     stayhomerecords = StayHomeRecord.objects.all()
     context = {'info': personalInfo, 'records':records, 'stayhomerecords':stayhomerecords}
@@ -52,11 +54,14 @@ def dashboardPage(request):
 @allowed_users(allowed_roles=['normal_user'])
 def userPage(request):
     # info  = request.user.relate.objects.all()
-    context = {}
+    userInfo = UserInfo.objects.filter(relate=request.user)
+    records = Record.objects.filter(phone=userInfo[0].phone)
+    context = {'info':userInfo[0], 'records':records}
     return render(request, 'user/user.html', context)
 
 
 @unauthenticated_user
+@csrf_exempt
 def loginPage(request):
 	if request.method == 'POST':
 		username = request.POST.get('username')
@@ -77,9 +82,9 @@ def logoutUser(request):
 @unauthenticated_user
 def registerPage(request):
 
-    form = UserCreationForm()
+    form = UserForm()
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserForm(request.POST)
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get('username')
@@ -92,3 +97,37 @@ def registerPage(request):
 
     context = {'form':form}
     return render(request, 'user/register.html', context)
+
+def createRecord(request):
+    form = RecordForm()
+    if request.method == 'POST':
+        form = RecordForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    context = {'form':form}
+    return render(request, 'user/create_record.html', context)
+
+
+def deleteRecord(request, pk):
+    record = Record.objects.get(id=pk)
+    if request.method == 'POST':
+        record.delete()
+        return redirect('home')
+    context = {'record':record}
+    return render(request, 'user/delete.html', context)
+
+
+def updateInfo(request, pk):
+    userInfo = UserInfo.objects.get(id=pk)
+    form = UserInfoForm(instance=userInfo)
+
+    if request.method == 'POST':
+        form = UserInfoForm(request.POST, instance=userInfo)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+
+    context = {'form':form}
+    return render(request, 'user/update_info.html', context)
+
