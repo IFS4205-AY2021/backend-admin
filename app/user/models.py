@@ -16,9 +16,10 @@ class UserInfo(models.Model):
     test_result     = models.CharField(max_length=5, choices=TestResult.choices)
     encryption_keys = models.TextField(blank=True, null=True)
     def __str__(self):
-        return self.name
+        return str(self.id) + self.name
 
 class StayHomeRecord(models.Model):
+    user            = models.ForeignKey(User, on_delete=models.CASCADE)
     name            = models.CharField(max_length=64)
     phone           = models.CharField(max_length=12)
     address         = models.TextField(blank=True, null=True)

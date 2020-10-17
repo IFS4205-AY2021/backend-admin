@@ -5,7 +5,6 @@
         <h5>Personal Information:</h5>
         <hr>
         <div class="card card-body">
-            <a class="btn btn-primary  btn-sm btn-block" href="">Update Information</a>
             <table class="table table-sm">
                 <tr>
                     <th></th>
@@ -17,6 +16,7 @@
                     <th></th>
                     <th>{{i.name}}</th>
                     <th>{{i.phone}}</th>
+                    <th> <a class="btn btn-primary btn-sm" href="{% url 'update_info' i.id %}">Update Information</a></th>
                 </tr>
                 {% endfor %}
             </table>
@@ -27,7 +27,7 @@
         <h5>Last 5 tracing records</h5>
         <hr>
         <div class="card card-body">
-            <a class="btn btn-primary  btn-sm btn-block" href="">Add Records</a>
+            <a class="btn btn-primary  btn-sm btn-block" href="{% url 'create_record' %}">Add Records</a>
             <table class="table table-sm">
                 <tr>
                     <th>Phone</th>
@@ -44,13 +44,60 @@
                     <th>{{r.time}}</th>
                     <th>{{r.location}}</th>
                     <th>{{r.address}}</th>
-                    <th>Remove</th>
+                    <th><a class="btn btn-primary btn-sm btn-block" href="{% url 'delete_record' r.id %}">Delete</a></th>
                 </tr>
                 {% endfor %}
             </table>
         </div>
     </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <h5>Stay Home Records</h5>
+        <hr>
+        <div class="card card-body">
 
+            <table class="table table-sm">
+                <!-- {% for r in stayhomerecords %}
+                <tr>
+                    <th>{{r.name}}</th>
+                    <th>{{r.phone}}</th>
+                    <th>{{r.location}}</th>
+                    <th>{{r.address}}</th>
+                    <th><a class="btn btn-primary btn-sm btn-block" href="{% url 'delete_record' r.id %}">Delete</a></th>
+                </tr>
+                {% endfor %} -->
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <h5>Last 5 tracing records</h5>
+        <hr>
+        <div class="card card-body">
+            <a class="btn btn-primary  btn-sm btn-block" href="{% url 'create_record' %}">Add Records</a>
+            <table class="table table-sm">
+                <tr>
+                    <th>Phone</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Location</th>
+                    <th>Address</th>
+                </tr>
+                {% for r in records %}
+                <tr>
+                    <th>{{r.phone}}</th>
+                    <th>{{r.date}}</th>
+                    <th>{{r.time}}</th>
+                    <th>{{r.location}}</th>
+                    <th>{{r.address}}</th>
+                    <th><a class="btn btn-primary btn-sm btn-block" href="{% url 'delete_record' r.id %}">Delete</a></th>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
 </div>
 
 {% endblock %}

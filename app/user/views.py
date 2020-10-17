@@ -56,7 +56,8 @@ def userPage(request):
     # info  = request.user.relate.objects.all()
     userInfo = UserInfo.objects.filter(relate=request.user)
     records = Record.objects.filter(phone=userInfo[0].phone)
-    context = {'info':userInfo[0], 'records':records}
+    stayHomeRecords = StayHomeRecord.filter(user=userInfo[0].relate)
+    context = {'info': userInfo[0], 'records': records, 'stayhomerecords': stayHomeRecords}
     return render(request, 'user/user.html', context)
 
 
