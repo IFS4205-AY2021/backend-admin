@@ -41,26 +41,6 @@ class RecordViewSet(viewsets.ModelViewSet):
     #     serializer = RecordSerializer(queryset, many=True)
     #     return Response(serializer.data)
 
-@login_required(login_url='login')
-@admin_only
-def dashboardPage(request):
-    personalInfo = UserInfo.objects.all()
-    records = Record.objects.all()
-    stayhomerecords = StayHomeRecord.objects.all()
-    context = {'info': personalInfo, 'records':records, 'stayhomerecords':stayhomerecords}
-    return render(request, 'user/dashboard.html', context)
-
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['normal_user'])
-def userPage(request):
-    # info  = request.user.relate.objects.all()
-    userInfo = UserInfo.objects.filter(relate=request.user)
-    records = Record.objects.filter(phone=userInfo[0].phone)
-    stayHomeRecords = StayHomeRecord.filter(user=userInfo[0].relate)
-    context = {'info': userInfo[0], 'records': records, 'stayhomerecords': stayHomeRecords}
-    return render(request, 'user/user.html', context)
-
-
 @unauthenticated_user
 @csrf_exempt
 def loginPage(request):
@@ -99,17 +79,41 @@ def registerPage(request):
     context = {'form':form}
     return render(request, 'user/register.html', context)
 
+@login_required(login_url='login')
+@admin_only
+def dashboardPage(request):
+    personalInfo = UserInfo.objects.all()
+    records = Record.objects.all()
+    stayhomerecords = StayHomeRecord.objects.all()
+    context = {'info': personalInfo, 'records':records, 'stayhomerecords':stayhomerecords}
+    return render(request, 'user/dashboard.html', context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['normal_user'])
+def userPage(request):
+    # info  = request.user.relate.objects.all()
+    userInfo = UserInfo.objects.filter(relate=request.user)
+    records = Record.objects.filter(user=request.user)
+    stayHomeRecords = StayHomeRecord.objects.filter(user=userInfo[0].relate)
+    context = {'info': userInfo[0], 'records': records, 'stayhomerecords': stayHomeRecords}
+    return render(request, 'user/user.html', context)
+
+@login_required(login_url='login')
 def createRecord(request):
     form = RecordForm()
     if request.method == 'POST':
         form = RecordForm(request.POST)
         if form.is_valid():
-            form.save()
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.save()
             return redirect('home')
+        else:
+            pass
     context = {'form':form}
     return render(request, 'user/create_record.html', context)
 
-
+@login_required(login_url='login')
 def deleteRecord(request, pk):
     record = Record.objects.get(id=pk)
     if request.method == 'POST':
@@ -118,7 +122,7 @@ def deleteRecord(request, pk):
     context = {'record':record}
     return render(request, 'user/delete.html', context)
 
-
+@login_required(login_url='login')
 def updateInfo(request, pk):
     userInfo = UserInfo.objects.get(id=pk)
     form = UserInfoForm(instance=userInfo)
@@ -128,7 +132,32 @@ def updateInfo(request, pk):
         if form.is_valid():
             form.save()
             return redirect('home')
+        else:
+            print(form)
 
     context = {'form':form}
     return render(request, 'user/update_info.html', context)
 
+@login_required(login_url='login')
+def createStayHomeRecord(request, pk):
+    form = StayHomeRecordForm()
+    if request.method == 'POST':
+        form = StayHomeRecordForm(request.POST)
+        if form.is_valid():
+            userInfo = UserInfo.objects.filter(relate=request.user)[0]
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.name = userInfo.name
+            obj.phone = userInfo.phone
+            obj.save()
+            return redirect('home')
+        else:
+            pass
+    context = {'form':form}
+    return render(request, 'user/create_stayhomerecord.html', context)
+
+def viewStayHomeRecord(request, pk):
+    record = StayHomeRecord.objects.filter(id=pk)[0]
+    print(record.name,record.phone,record.time_uploaded,record.location)
+    context = {'stayhomerecord':record}
+    return render(request, 'user/view_stayhomerecord.html', context)

@@ -1,0 +1,49 @@
+{% extends 'user/main.html' %} {% load static %} {% block content %}
+
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <h5>Stay Home Record</h5>
+        <hr>
+        <div class="card card-body">
+            <table class="table table-sm">
+                <tr>
+                    <th>Name</th>
+                    <th>{{stayhomerecord.name}}</th>
+                </tr>
+                <tr>
+                    <th>Phone</th>
+                    <th>{{stayhomerecord.phone}}</th>
+                </tr>
+                <tr>
+                    <th>Time Uploaded</th>
+                    <th>{{stayhomerecord.time_uploaded}}</th>
+                </tr>
+                <tr>
+                    <th>Location</th>
+                    <th>{{stayhomerecord.location}}</th>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <th>{{stayhomerecord.address}}</th>
+                </tr>
+                <tr>
+                    <th>Images</th>
+                    <th>{{stayhomerecord.images}}</th>
+                </tr>
+                <tr>
+                    <th>Videos</th>
+                    <th>{{stayhomerecord.videos}}</th>
+                </tr>
+                    <th>Documents</th>
+                    <th>{{stayhomerecord.documents}}</th>
+                </tr>
+                
+            </table>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}

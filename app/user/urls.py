@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UserViewSet, RecordViewSet, dashboardPage, loginPage, registerPage, logoutUser, userPage, createRecord, updateInfo, deleteRecord
+from .views import *
 from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView)
 
 urlpatterns = [
@@ -14,7 +14,9 @@ urlpatterns = [
     path('register/', registerPage, name='register'),
     path('create_record/', createRecord, name='create_record'),
     path('update_info/<str:pk>/', updateInfo, name='update_info'),
-    path('delete_record/<str:pk>/', deleteRecord, name='delete_record'),    
+    path('delete_record/<str:pk>/', deleteRecord, name='delete_record'),
+    path('create_stayhomerecord/<str:pk>', createStayHomeRecord, name='create_stayhomerecord'),
+    path('view_stayhomerecord/<str:pk>/', viewStayHomeRecord, name='view_stayhomerecord'),
 ]
 
 

@@ -1,5 +1,7 @@
 {% extends 'user/main.html' %} {% block content %}
-
+<div class="row">
+    <br>
+</div>
 <div class="row">
     <div class="col-md-6">
         <h5>Personal Information:</h5>
@@ -20,12 +22,12 @@
                     <th>{{info.age}}</th>
                 </tr>
                 <tr>
-                    <th>Address</th>
-                    <th>{{info.address}}</th>
-                </tr>
-                <tr>
                     <th>Location</th>
                     <th>{{info.location}}</th>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <th>{{info.address}}</th>
                 </tr>
                 <tr>
                     <th>Test result</th>
@@ -42,7 +44,6 @@
             <a class="btn btn-primary  btn-sm btn-block" href="{% url 'create_record' %}">Add Records</a>
             <table class="table table-sm">
                 <tr>
-                    <th>Phone</th>
                     <th>Date</th>
                     <th>Time</th>
                     <th>Location</th>
@@ -50,7 +51,6 @@
                 </tr>
                 {% for r in records %}
                 <tr>
-                    <th>{{r.phone}}</th>
                     <th>{{r.date}}</th>
                     <th>{{r.time}}</th>
                     <th>{{r.location}}</th>
@@ -63,30 +63,31 @@
     </div>
 
 </div>
+<div class="row">
+    <hr>
+</div>
 
 <div class="row">
     <div class="col-md-6">
         <h5>Stay Home Records</h5>
         <hr>
         <div class="card card-body">
-            <a class="btn btn-primary  btn-sm btn-block" href="{% url 'update_info' info.id %}">Update Information</a>
+            <a class="btn btn-primary  btn-sm btn-block" href="{% url 'create_stayhomerecord' info.id %}">Add Stay Home Record</a>
             <table class="table table-sm">
                 <tr>
-                    <th>Name</th>
-                    <th>{{stayhomerecords.name}}</th>
-                </tr>
-                <tr>
-                    <th>Phone</th>
-                    <th>{{stayhomerecords.phone}}</th>
-                </tr>
-                <tr>
-                    <th>Address</th>
-                    <th>{{stayhomerecords.address}}</th>
-                </tr>
-                <tr>
+                   <th>Time Uploaded</th>
                     <th>Location</th>
-                    <th>{{stayhomerecords.location}}</th>
+                    <th>Address</th>
+                    <th></th>
                 </tr>
+                {% for r in stayhomerecords %}
+                <tr>
+                    <th>{{r.time_uploaded}}</th>
+                    <th>{{r.location}}</th>
+                    <th>{{r.address}}</th>
+                    <th><a class="btn btn-primary btn-sm btn-block" href="{% url 'view_stayhomerecord' r.id %}">View</a></th>
+                </tr>
+                {% endfor %}
             </table>
         </div>
     </div>
