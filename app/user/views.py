@@ -161,3 +161,8 @@ def viewStayHomeRecord(request, pk):
     print(record.name,record.phone,record.time_uploaded,record.location)
     context = {'stayhomerecord':record}
     return render(request, 'user/view_stayhomerecord.html', context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['normal_user'])
+def userImage(request, img):
+    return None

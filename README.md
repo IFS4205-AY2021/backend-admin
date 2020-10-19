@@ -7,7 +7,7 @@ Admin subsystem back end.
 pip3 install django-cors-headers
 pip3 install djangorestframework
 pip3 install djangorestframework-simplejwt
-
+pip3 install pillow
 python3 manage.py shell
 
 # From Django Shell:

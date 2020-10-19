@@ -26,9 +26,9 @@ class StayHomeRecord(models.Model):
     time_uploaded   = models.DateTimeField(default=datetime.now, blank=True)
     location        = models.CharField(max_length=6, validators=[MinLengthValidator(6)])
     address         = models.TextField(blank=True, null=True)
-    images          = models.TextField(blank=True, null=True)
-    videos          = models.TextField(blank=True, null=True)
-    documents       = models.TextField(blank=True, null=True)
+    images          = models.ImageField(upload_to='static/media/images/%Y/%m/%d/', blank=True, null=True)
+    videos          = models.FileField(upload_to='static/media/videos/%Y/%m/%d/', blank=True, null=True)
+    documents       = models.FileField(upload_to='static/media/docs/%Y/%m/%d/', blank=True, null=True)
     def __str__(self):
         return str(self.user)
 
