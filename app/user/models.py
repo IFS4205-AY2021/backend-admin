@@ -8,10 +8,15 @@ class UserInfo(models.Model):
         POSITIVE=True
         NEGATIVE=False
         UNKNOWN=None
+    class genders(models.TextChoices):
+        MALE='M'
+        FEMALE='F'
+        UNKNOWN='NA'
     relate          = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     name            = models.CharField(max_length=64)
     phone           = models.CharField(max_length=12)
     age             = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(120)])
+    gender          = models.CharField(max_length=2, choices=genders.choices, default=genders.UNKNOWN)
     location        = models.CharField(max_length=6, validators=[MinLengthValidator(6)])
     address         = models.CharField(max_length=16)
     test_result     = models.CharField(max_length=5, choices=TestResult.choices, default=TestResult.UNKNOWN)

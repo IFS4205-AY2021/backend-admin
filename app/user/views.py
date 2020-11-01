@@ -62,7 +62,6 @@ def logoutUser(request):
 
 @unauthenticated_user
 def registerPage(request):
-
     form = UserForm()
     if request.method == 'POST':
         form = UserForm(request.POST)
@@ -85,7 +84,8 @@ def dashboardPage(request):
     personalInfo = UserInfo.objects.all()
     records = Record.objects.all()
     stayhomerecords = StayHomeRecord.objects.all()
-    context = {'info': personalInfo, 'records':records, 'stayhomerecords':stayhomerecords}
+    contacts = Contact.objects.all()
+    context = {'info': personalInfo[:10], 'records':records[:10], 'stayhomerecords':stayhomerecords[:10], 'contacts':contacts[:10]}
     return render(request, 'user/dashboard.html', context)
 
 @login_required(login_url='login')
@@ -155,6 +155,26 @@ def createStayHomeRecord(request, pk):
             pass
     context = {'form':form}
     return render(request, 'user/create_stayhomerecord.html', context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def createStayHomeRecordAdmin(request):
+    class StayHomeRecordFullForm(ModelForm):
+        # user = models.ForeignKey(User)
+        class Meta:
+            model = Record
+            fields =  '__all__'
+    form = StayHomeRecordFullForm()
+    if request.method == 'POST':
+        form = StayHomeRecordFullForm(request.POST)
+        if form.is_valid():
+            userInfo = UserInfo.objects.filter(relate=request.user)[0]
+            obj = form.save()
+            return redirect('home')
+        else:
+            pass
+    context = {'form':form}
+    return render(request, 'user/create_stayhomerecord_admin.html', context)
 
 def viewStayHomeRecord(request, pk):
     record = StayHomeRecord.objects.filter(id=pk)[0]

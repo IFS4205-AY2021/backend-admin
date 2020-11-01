@@ -16,6 +16,7 @@ urlpatterns = [
     path('update_info/<str:pk>/', updateInfo, name='update_info'),
     path('delete_record/<str:pk>/', deleteRecord, name='delete_record'),
     path('create_stayhomerecord/<str:pk>/', createStayHomeRecord, name='create_stayhomerecord'),
+    path('create_stayhomerecord_admin/', createStayHomeRecordAdmin, name='create_stayhomerecord_admin'),
     path('view_stayhomerecord/<str:pk>/', viewStayHomeRecord, name='view_stayhomerecord'),
     path('media/images/<str:img>/', userImage, name='user_image')
 ]
