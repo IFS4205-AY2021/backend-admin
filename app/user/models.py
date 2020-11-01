@@ -21,6 +21,7 @@ class UserInfo(models.Model):
     address         = models.CharField(max_length=16)
     test_result     = models.CharField(max_length=5, choices=TestResult.choices, default=TestResult.UNKNOWN)
     encryption_keys = models.TextField(blank=True, null=True)
+    cluster_id      = models.IntegerField(default=0)
     def __str__(self):
         return str(self.id) + self.name
 
