@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+    table {
+
+     border-collapse: collapse;
+
+     font-family: Futura, Arial, sans-serif;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+caption {
+
+     font-size: larger;
+
+     margin: 1em auto;
+
+}
+
+th,td {
+
+     padding: .65em;
+
+}
+
+th {
+
+     background: #555 nonerepeat scroll 0 0;
+
+   /* border: 1px solid #777; */
+
+   color: #fff;
+
+}
+
+td {
+
+     /* border: 1px solid #777; */
+
+}
+
+tbody tr:nth-child(odd) {
+
+     background: #ccc;
+
+}
+
+th:first-child {
+
+     border-radius: 9px 0 0 0;
+
+}
+
+th:last-child {
+
+     border-radius: 0 9px 0 0;
+
+}
+
+tr:last-child td:first-child {
+
+     border-radius: 0 0 0 9px;
+
+}
+
+tr:last-child td:last-child {
+
+     border-radius: 0 0 9px 0;
+
+}
+
+
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <title>List all</title>
+</head>
+<body>
+<table border="1">
+    <thread>
+    <tr>
+{#        <th>Name</th>#}
+<!--        <th>Phone</th>-->
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Location</th>
+        <th>Test result</th>
+        <th>Whether in cluster</th>
+    </tr>
+    </thread>
+     {% for data in data %}
+    <tr>
+{#        <td>{{ data.name }}</td>#}
+{#        <td>{{ data.phone }}</td>#}
+        <td>{{ data.age_min }}~{{ data.age_max }} </td>
+        <td>{{ data.gender }}</td>
+        <td>{{ data.location }}</td>
+        <td>{{ data.test_result }}</td>
+        {% if data.cluster_id == 0 %}
+            <td>No</td>
+        {% else %}
+            <td>Yes</td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

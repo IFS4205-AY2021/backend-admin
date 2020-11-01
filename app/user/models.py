@@ -70,3 +70,22 @@ class Tracer(models.Model):
     name            = models.CharField(max_length=64)
     phone           = models.CharField(max_length=12)
     encryption_keys = models.TextField(blank=True, null=True)
+
+
+class K_User(models.Model):
+    class TestResult(models.TextChoices):
+        POSITIVE = True
+        NEGATIVE = False
+        UNKNOWN = None
+
+    class genders(models.TextChoices):
+        MALE='M'
+        FEMALE='F'
+        UNKNOWN='NA'
+    cluster_id = models.CharField(max_length=128)
+    age = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(120)])
+    age_min = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(120)])
+    age_max = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(120)])
+    gender = models.CharField(max_length=1)
+    location = models.CharField(max_length=32)
+    test_result = models.CharField(max_length=5, choices=TestResult.choices)

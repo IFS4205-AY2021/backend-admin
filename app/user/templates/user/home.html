@@ -1,0 +1,161 @@
+{% extends 'user/main.html' %}{% block content %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Tracer Sussystem</title>
+
+    <script type="text/javascript" src="jquery.js"></script>
+
+    <link href="style.css" type="text/css" rel="stylesheet" />
+    <style type="text/css">
+        body {
+            margin: 0px;
+        }
+        
+        .div1 {
+            position: relative;
+            left: 100px;
+            float: left;
+            width: 50%;
+            height: 500px;
+            border: 50px;
+        }
+        
+        .div2 {
+            position: relative;
+            left: 200px;
+            float: left;
+            width: 50%;
+            height: 500px;
+            border: 50px;
+        }
+        
+        .div3 {
+            position: relative;
+            /*相对定位：相对于自己原来的位置*/
+            left: 50px;
+            /*横坐标：正值表示向右偏移，负值表示向左偏移*/
+            /*纵坐标：正值表示向下偏移，负值表示向上偏移*/
+            width: 300px;
+        }
+        
+        .div4 {
+            position: relative;
+            /*相对定位：相对于自己原来的位置*/
+            left: 0px;
+            /*横坐标：正值表示向右偏移，负值表示向左偏移*/
+            /*纵坐标：正值表示向下偏移，负值表示向上偏移*/
+            width: 100%;
+            height: 160px;
+        }
+        
+        .div5 {
+            position: relative;
+            /*相对定位：相对于自己原来的位置*/
+            left: 650px;
+            /*横坐标：正值表示向右偏移，负值表示向左偏移*/
+            /*纵坐标：正值表示向下偏移，负值表示向上偏移*/
+        }
+    </style>
+</head>
+
+<body>
+    <div class="a">
+        <h1 class="div5">Tracer Susystem</h1>
+
+        <div class="div2">
+            <br/>
+            <form action="/api/tracer/search-status/" method="post">
+                {% csrf_token %} Search Status:&nbsp;&nbsp;<input type="text" name="phone" placeholder="12345678">
+
+                <input type="submit" value="Search">
+            </form>
+
+            <body class="div4">
+                {{ results }} <br/>
+                <div class="div3">
+                    {% for i in phone %} {{ i }}
+                    <br> {% endfor %}
+                </div>
+                {% if test_result != 'No such user in the system' %} {% if test_result == "True" %}
+                <p>Current test result: <b>Positive</b></p>
+                <form action="/api/tracer/change-status/" method="post">
+                    {% csrf_token %} Change Status:&nbsp;&nbsp; Phone Number:&nbsp;&nbsp;&nbsp;<input type="text" id='phone' name='phone' onload="phoneN()"> <br/> &nbsp;&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbspUpdated
+                    Status:&nbsp;&nbsp;
+                    <input type="text" name="status" placeholder="positive">
+                    <input type="submit" value="Change">
+                </form>
+                {% elif test_result == "False"%}
+                <p>Current test result: <b>Negative</b></p>
+                <form action="/api/tracer/change-status/" method="post">
+                    {% csrf_token %} Change Status:&nbsp;&nbsp; Phone Number:&nbsp;&nbsp;&nbsp;<input type="text" id='phone' name='phone' onload="phoneN()"> <br/> &nbsp;&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbspUpdated
+                    Status:&nbsp;&nbsp;
+                    <script>
+                        function phoneN() {
+                            var psel = document.getElementById("phone");
+                            alert("获取到的value：" + psel.value + " ," + $("#phone").val()); //获取
+                            psel.value = "123"; //设置
+                            alert("设置后的value：" + psel.value); //设置后的
+                        };
+                    </script>
+                    <input type="text" name="status" placeholder="negative">
+                    <input type="submit" value="Change">
+                </form>
+                {% elif test_result == "None" %}
+                <p>Current test result: <b>Unknown</b></p>
+                <form action="/api/tracer/change-status/" method="post">
+                    {% csrf_token %} Change Status:&nbsp;&nbsp; Phone Number:&nbsp;&nbsp;&nbsp;<input type="text" id='phone' name='phone' onload="phoneN()"> <br/> &nbsp;&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbsp&nbsp;&nbspUpdated
+                    Status:&nbsp;&nbsp;
+                    <input type="text" name="status" placeholder="unknown">
+                    <input type="submit" value="Change">
+                </form>
+                {% endif %} {% else %}
+                <p>{{ test_result }}</p>
+                {% endif %} {{ msg }} {% if img == 'img' %}
+                <img src="/media/images/graph.png" alt="contact graph"> {% endif %}
+            </body>
+            <br>
+        </div>
+
+        <div class="div1">
+
+            <body>
+                <!-- <form action="/api/tracer/search-contact/" method="post">
+                {% csrf_token %} Search Contact:&nbsp;&nbsp; Phone Number:&nbsp;&nbsp;<input type="text" name="phone">
+                <input type="submit" value="Search">
+            </form>
+            {{ results }} {% for i in phone %} {{ i }}
+            <br> {% endfor %} -->
+                <br>
+                <form action="/api/tracer/add-contact/" method="post">
+                    {% csrf_token %} Add Contact:&nbsp;&nbsp; Phone Number1:&nbsp;&nbsp;<input type="text" name="phone1"><br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Phone
+                    Number2:&nbsp;
+                    <input type="text" name="phone2">
+                    <input type="submit" value="submit">
+                </form>
+                {{ addmsg }}
+                <br>
+                <form action="/api/tracer/delete-contact/" method="post">
+                    {% csrf_token %} Delete Contact:&nbsp;&nbsp; Phone Number1:&nbsp;&nbsp;<input type="text" name="phone1"><br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Phone
+                    Number2:&nbsp;
+                    <input type="text" name="phone2">
+                    <input type="submit" value="Delete">
+                </form>
+                {{ delmsg}}
+                <br>
+                <form action="/api/tracer/search-records/" method="post">
+                    {% csrf_token %} Search Records:&nbsp;&nbsp; Phone Number:&nbsp;&nbsp;<input type="text" name="phone">
+                    <input type="submit" value="Search">
+                </form>
+                {% for i in records %} {% if i == "next" %}
+                <br> {% else %} {{ i }} {% endif%} {% endfor %} {{ recmsg }}
+            </body>
+        </div>
+    </div>
+</body>
+
+
+</html>
+{% endblock content %}
