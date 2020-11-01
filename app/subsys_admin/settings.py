@@ -27,7 +27,7 @@ SECRET_KEY = os.environ['SECRET']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.1.132', '0.0.0.0']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.1.132', '0.0.0.0', 'ifs4205-ay2020-1-i.comp.nus.edu.sg', 'ifs4205-ay2020-2-i.comp.nus.edu.sg', 'ifs4205-ay2020-3-i.comp.nus.edu.sg']
 CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
