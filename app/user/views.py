@@ -770,7 +770,7 @@ def count_avg(request):
             id = user.phone
             contact_data = Contact.objects.all()
             for contact in contact_data:
-                if contact.person1_id == id or contact.person2_id == id:
+                if contact.user1 == id or contact.user2 == id:
                     total_contact = total_contact + 1
                     print(total_contact)
 
@@ -797,7 +797,7 @@ def count_avg_P(request):
             id = user.phone
             contact_data = Contact.objects.all()
             for contact in contact_data:
-                if contact.person1_id == id or contact.person2_id == id:
+                if contact.user1 == id or contact.user2 == id:
                     total_contact = total_contact + 1
                     print(total_contact)
 
