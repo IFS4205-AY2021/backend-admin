@@ -485,7 +485,7 @@ given_k = 2
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['researcher'])
 def researcher_dashboard(request):
-    return render(request, 'user/researcher_dashboard.html', {})
+    return render(request, 'user/researcher_dashboard.html', {'data':list_cluster(request)})
 
 
 def message_display_home(request, message):
@@ -507,37 +507,37 @@ def list_(request):
         # print(cluster_id)
         if cluster_id != "":
             return list_clu(request, cluster_id)
-        elif age_max == "" and age_min == "" and location == "" and gender == "" and test_result == "":
+        elif age_max == "" and age_min == "" and location == "" and len(gender) != 1 and test_result == "":
             return list_all(request)
-        elif (age_max != "" or age_min != "") and location == "" and gender == "" and test_result == "":
+        elif (age_max != "" or age_min != "") and location == "" and len(gender) != 1 and test_result == "":
             return list_age(request, age_min, age_max, UserInfo.objects.all())
-        elif (age_max != "" or age_min != "") and location != "" and gender == "" and test_result == "":
+        elif (age_max != "" or age_min != "") and location != "" and len(gender) != 1 and test_result == "":
             return list_age(request, age_min, age_max, UserInfo.objects.filter(location=location))
-        elif (age_max != "" or age_min != "") and location == "" and gender != "" and test_result == "":
+        elif (age_max != "" or age_min != "") and location == "" and len(gender) == 1 and test_result == "":
             return list_age(request, age_min, age_max, UserInfo.objects.filter(gender=gender))
-        elif (age_max != "" or age_min != "") and location == "" and gender == "" and test_result != "":
+        elif (age_max != "" or age_min != "") and location == "" and len(gender) != 1 and test_result != "":
             return list_age(request, age_min, age_max, UserInfo.objects.filter(test_result=test_result))
-        elif (age_max != "" or age_min != "") and location != "" and gender != "" and test_result == "":
+        elif (age_max != "" or age_min != "") and location != "" and len(gender) != 1 and test_result == "":
             return list_age(request, age_min, age_max, UserInfo.objects.filter(location=location).filter(gender=gender))
-        elif (age_max != "" or age_min != "") and location != "" and gender == "" and test_result != "":
+        elif (age_max != "" or age_min != "") and location != "" and len(gender) != 1 and test_result != "":
             return list_age(request, age_min, age_max, UserInfo.objects.filter(location=location).filter(test_result=test_result))
-        elif (age_max != "" or age_min != "") and location == "" and gender != "" and test_result != "":
+        elif (age_max != "" or age_min != "") and location == "" and len(gender) == 1 and test_result != "":
             return list_age(request, age_min, age_max, UserInfo.objects.filter(test_result=test_result).filter(gender=gender))
-        elif (age_max != "" or age_min != "") and location != "" and gender != "" and test_result != "":
+        elif (age_max != "" or age_min != "") and location != "" and len(gender) == 1 and test_result != "":
             return list_age(request, age_min, age_max, UserInfo.objects.filter(location=location).filter(gender=gender).filter(test_result=test_result))
-        elif age_max == "" and age_min == "" and location != "" and gender == "" and test_result == "":
+        elif age_max == "" and age_min == "" and location != "" and len(gender) != 1 and test_result == "":
             return list_loc(request, location, UserInfo.objects.all())
-        elif age_max == "" and age_min == "" and location != "" and gender == "" and test_result != "":
+        elif age_max == "" and age_min == "" and location != "" and len(gender) != 1 and test_result != "":
             return list_loc(request, location, UserInfo.objects.filter(test_result=test_result))
-        elif age_max == "" and age_min == "" and location != "" and gender != "" and test_result == "":
+        elif age_max == "" and age_min == "" and location != "" and len(gender) == 1 and test_result == "":
             return list_loc(request, location, UserInfo.objects.filter(gender=gender))
-        elif age_max == "" and age_min == "" and location != "" and gender != "" and test_result != "":
+        elif age_max == "" and age_min == "" and location != "" and len(gender) == 1 and test_result != "":
             return list_loc(request, location, UserInfo.objects.filter(test_result=test_result).filter(gender=gender))
-        elif age_max == "" and age_min == "" and location == "" and gender != "" and test_result == "":
+        elif age_max == "" and age_min == "" and location == "" and len(gender) == 1 and test_result == "":
             return list_gen(request, gender, UserInfo.objects.all())
-        elif age_max == "" and age_min == "" and location == "" and gender == "" and test_result != "":
+        elif age_max == "" and age_min == "" and location == "" and len(gender) != 1 and test_result != "":
             return list_res(request, test_result, UserInfo.objects.all())
-        elif age_max == "" and age_min == "" and location != "" and gender != "" and test_result != "":
+        elif age_max == "" and age_min == "" and location == "" and gender != "" and test_result != "":
             return list_gen(request, gender, UserInfo.objects.filter(test_result=test_result))
         else:
             return HttpResponse("Invalid request")
@@ -745,15 +745,15 @@ def list_cluster(request):
     for user in users:
         print(user.cluster_id)
 
-        if user.cluster_id in ids:
+        if user.cluster_id in ids or user.cluster_id == 0:
             print("already exist")
-            break
+            continue
         else:
             ids.append(user.cluster_id)
             count = UserInfo.objects.filter(cluster_id=user.cluster_id).count()
-            if count >= given_k:
-                print("added")
-                valid_ids.append(user.cluster_id)
+            # if count >= given_k:
+            # print("added")
+            valid_ids.append(user.cluster_id)
     return valid_ids
 
 
@@ -767,7 +767,7 @@ def count_avg(request):
         data = UserInfo.objects.filter(location=location)
         for user in data:
             person_no = person_no + 1
-            id = user.phone
+            id = user.relate
             contact_data = Contact.objects.all()
             for contact in contact_data:
                 if contact.user1 == id or contact.user2 == id:
@@ -824,7 +824,7 @@ def count_total(request, cluster_id):
 
 def count_total_infected(request, cluster_id):
     if request.POST:
-        num = len(UserInfo.objects.filter(cluster_id=cluster_id).filter(test_result="POSITIVE"))
+        num = len(UserInfo.objects.filter(cluster_id=cluster_id).filter(test_result="True"))
         return num
     else:
         return HttpResponse("Invalid request")
@@ -860,7 +860,7 @@ def count_total_P(request):
     if request.POST:
         location = str(request.POST['location'])
         user_list = UserInfo.objects.filter(location=location)
-        P_num = user_list.filter(test_result="POSITIVE").count()
+        P_num = user_list.filter(test_result="True").count()
         num = user_list.count()
         per = P_num / num * 100
         line1 = "The total number of people who has a POSITIVE test result is " + str(P_num) + ". "
