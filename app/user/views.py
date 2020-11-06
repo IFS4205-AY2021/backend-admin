@@ -311,6 +311,9 @@ class RecordViewSet(viewsets.ModelViewSet):
     #     serializer = RecordSerializer(queryset, many=True)
     #     return Response(serializer.data)
 
+#
+#   Login
+#
 @unauthenticated_user
 @csrf_exempt
 def loginPage(request):
@@ -340,6 +343,9 @@ def logoutUser(request):
     logout(request)
     return redirect('login')
 
+#
+#   Create normal user
+#
 @unauthenticated_user
 def registerPage(request):
     form = UserForm()
@@ -358,19 +364,21 @@ def registerPage(request):
     context = {'form':form}
     return render(request, 'user/register.html', context)
 
+#
+#   Main User / Admin Page
+#
 @login_required(login_url='login')
 @admin_only
 def dashboardPage(request):
-    personalInfo = UserInfo.objects.all()
+    personalInfo = UserInfo.objects.exclude(gender='ST')
     records = Record.objects.all()
     stayhomerecords = StayHomeRecord.objects.all()
     contacts = Contact.objects.all()
-    context = {'info': personalInfo[:10], 'records':records[:10], 'stayhomerecords':stayhomerecords[:10], 'contacts':contacts[:10]}
+    context = {'info': personalInfo, 'records':records, 'stayhomerecords':stayhomerecords, 'contacts':contacts}
     return render(request, 'user/dashboard.html', context)
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['normal_user'])
-# @allowed_users(allowed_roles=['normal_user'])
 def userPage(request):
     # info  = request.user.relate.objects.all()
     userInfo = UserInfo.objects.filter(relate=request.user)
@@ -379,31 +387,11 @@ def userPage(request):
     context = {'info': userInfo[0], 'records': records, 'stayhomerecords': stayHomeRecords}
     return render(request, 'user/user.html', context)
 
+#
+#   Update User Information
+#
 @login_required(login_url='login')
-def createRecord(request):
-    form = RecordForm()
-    if request.method == 'POST':
-        form = RecordForm(request.POST)
-        if form.is_valid():
-            obj = form.save(commit=False)
-            obj.user = request.user
-            obj.save()
-            return redirect('homepage')
-        else:
-            pass
-    context = {'form':form}
-    return render(request, 'user/create_record.html', context)
-
-@login_required(login_url='login')
-def deleteRecord(request, pk):
-    record = Record.objects.get(id=pk)
-    if request.method == 'POST':
-        record.delete()
-        return redirect('homepage')
-    context = {'record':record}
-    return render(request, 'user/delete.html', context)
-
-@login_required(login_url='login')
+@allowed_users(allowed_roles=['normal_user', 'admin'])
 def updateInfo(request, pk):
     userInfo = UserInfo.objects.get(id=pk)
     form = UserInfoForm(instance=userInfo)
@@ -419,7 +407,55 @@ def updateInfo(request, pk):
     context = {'form':form}
     return render(request, 'user/update_info.html', context)
 
+#
+#   User Outing records
+#
 @login_required(login_url='login')
+@allowed_users(allowed_roles=['normal_user', 'admin'])
+def createRecord(request):
+    form = RecordForm()
+    if request.method == 'POST':
+        form = RecordForm(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.save()
+            return redirect('homepage')
+        else:
+            pass
+    context = {'form':form}
+    return render(request, 'user/create_record.html', context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def createRecordAdmin(request):
+    form = RecordFormAdmin()
+    if request.method == 'POST':
+        form = RecordFormAdmin(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('homepage')
+        else:
+            return redirect('homepage')
+    context = {'form':form}
+    return render(request, 'user/create_record_admin.html', context)
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['normal_user', 'admin'])
+def deleteRecord(request, pk):
+    record = Record.objects.get(id=pk)
+    if request.method == 'POST':
+        record.delete()
+        return redirect('homepage')
+    context = {'record':record}
+    return render(request, 'user/delete.html', context)
+
+#
+#   User Stay Home Record
+#
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['normal_user', 'admin'])
 def createStayHomeRecord(request, pk):
     form = StayHomeRecordForm()
     if request.method == 'POST':
@@ -437,6 +473,9 @@ def createStayHomeRecord(request, pk):
     context = {'form':form}
     return render(request, 'user/create_stayhomerecord.html', context)
 
+#
+#   User Contact Records
+#
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
 def createContactRecord(request):
@@ -461,8 +500,6 @@ def deleteContactRecord(request, pk):
     context = {'record':record}
     return render(request, 'user/delete_contact.html', context)
 
-
-
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
 def createStayHomeRecordAdmin(request):
@@ -484,12 +521,17 @@ def createStayHomeRecordAdmin(request):
     context = {'form':form}
     return render(request, 'user/create_stayhomerecord_admin.html', context)
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['normal_user', 'admin'])
 def viewStayHomeRecord(request, pk):
     record = StayHomeRecord.objects.filter(id=pk)[0]
     print(record.name,record.phone,record.time_uploaded,record.location)
     context = {'stayhomerecord':record}
     return render(request, 'user/view_stayhomerecord.html', context)
 
+#
+#   Not used
+#
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['normal_user'])
 def userImage(request, img):

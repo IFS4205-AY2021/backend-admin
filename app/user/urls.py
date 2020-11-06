@@ -23,6 +23,7 @@ urlpatterns = [
     path('logout/', logoutUser, name='logout'),
     path('register/', registerPage, name='register'),
     path('create_record/', createRecord, name='create_record'),
+    path('create_record_admin/', createRecordAdmin, name='create_record_admin'),
     path('create_contact/', createContactRecord, name='create_contact'),
     path('update_info/<str:pk>/', updateInfo, name='update_info'),
     path('delete_record/<str:pk>/', deleteRecord, name='delete_record'),

@@ -2,44 +2,45 @@
 
 <div class="row">
     <div class="col-md-6">
+        <br>
         <h5>Personal Information:</h5>
         <hr>
-        <div class="card card-body">
+        <div class="card card-body" style="height: 500px; overflow: auto">
             <table class="table table-sm">
-                <tr>
-                    <th></th>
-                    <th>Entry</th>
-                    <th>Value</th>
-                </tr>
-                {% for i in info %}
-                <tr>
-                    <th></th>
-                    <th>{{i.name}}</th>
-                    <th>{{i.phone}}</th>
-                    <th> <a class="btn btn-primary btn-sm" href="{% url 'update_info' i.id %}">Update Information</a></th>
-                </tr>
-                {% endfor %}
+                <thead>
+                    <tr>
+                        <th>Entry</th>
+                        <th>Value</th>
+                        <th>Action</th>
+                    </tr>
+                    {% for i in info %}
+                    <tr>
+                        <th>{{i.name}}</th>
+                        <th>{{i.phone}}</th>
+                        <th> <a class="btn btn-primary btn-sm" href="{% url 'update_info' i.id %}">Update Information</a></th>
+                    </tr>
+                    {% endfor %}
+                </thead>
             </table>
         </div>
     </div>
 
     <div class="col-md-6">
-        <h5>Last 5 tracing records</h5>
+        <br>
+        <h5>Tracing records</h5>
         <hr>
-        <div class="card card-body">
-            <a class="btn btn-primary  btn-sm btn-block" href="{% url 'create_record' %}">Add Records</a>
+        <div class="card card-body" style="height: 500px; overflow: auto">
+            <a class="btn btn-primary  btn-sm btn-block" href="{% url 'create_record_admin' %}">Add Records</a>
             <table class="table table-sm">
                 <tr>
-                    <th>Phone</th>
                     <th>Date</th>
                     <th>Time</th>
                     <th>Location</th>
                     <th>Address</th>
-                    <th>Remove</th>
+                    <th>Action</th>
                 </tr>
                 {% for r in records %}
                 <tr>
-                    <th>{{r.phone}}</th>
                     <th>{{r.date}}</th>
                     <th>{{r.time}}</th>
                     <th>{{r.location}}</th>
@@ -53,16 +54,17 @@
 </div>
 <div class="row">
     <div class="col-md-6">
+        <br>
         <h5>Stay Home Records</h5>
         <hr>
-        <div class="card card-body">
+        <div class="card card-body" style="height: 500px; overflow: auto">
             <a class="btn btn-primary  btn-sm btn-block" href="{% url 'create_stayhomerecord_admin' %}">Add Stay Home Record</a>
             <table class="table table-sm">
                 <tr>
                     <th>Time Uploaded</th>
                     <th>Location</th>
                     <th>Address</th>
-                    <th></th>
+                    <th>Action</th>
                 </tr>
                 {% for r in stayhomerecords %}
                 <tr>
@@ -77,14 +79,16 @@
     </div>
 
     <div class="col-md-6">
+        <br>
         <h5>Contacting records</h5>
         <hr>
-        <div class="card card-body">
+        <div class="card card-body" style="height: 500px; overflow: auto">
             <a class="btn btn-primary  btn-sm btn-block" href="{% url 'create_contact' %}">Add Records</a>
             <table class="table table-sm">
                 <tr>
                     <th>Spreader</th>
                     <th>Affected</th>
+                    <th>Action</th>
                 </tr>
                 {% for r in contacts %}
                 <tr>

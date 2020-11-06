@@ -17,6 +17,11 @@ class RecordForm(ModelForm):
     # def __init__(self, *args, **kwargs):
     #     self.Meta.fields['user'].widget = HiddenInput()
 
+class RecordFormAdmin(ModelForm):
+    class Meta:
+        model = Record
+        fields = '__all__'
+
 class StayHomeRecordForm(ModelForm):
     class Meta:
         model = StayHomeRecord
