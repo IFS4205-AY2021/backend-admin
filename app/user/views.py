@@ -506,15 +506,15 @@ def createStayHomeRecordAdmin(request):
     class StayHomeRecordFullForm(ModelForm):
         # user = models.ForeignKey(User)
         class Meta:
-            model = Record
+            model = StayHomeRecord
             fields =  '__all__'
     form = StayHomeRecordFullForm()
     if request.method == 'POST':
         form = StayHomeRecordFullForm(request.POST)
         if form.is_valid():
             print(request)
-            userInfo = UserInfo.objects.filter(relate=form.cleaned_data['user'])[0]
-            obj = form.save()
+            # userInfo = UserInfo.objects.filter(relate=form.cleaned_data['user'])[0]
+            form.save()
             return redirect('homepage')
         else:
             pass
