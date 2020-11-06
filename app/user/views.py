@@ -439,6 +439,32 @@ def createStayHomeRecord(request, pk):
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
+def createContactRecord(request):
+    form = ContactForm()
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('homepage')
+        else:
+            return redirect('homepage')
+    context = {'form':form}
+    return render(request, 'user/create_contact.html', context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def deleteContactRecord(request, pk):
+    record = Contact.objects.get(id=pk)
+    if request.method == 'POST':
+        record.delete()
+        return redirect('homepage')
+    context = {'record':record}
+    return render(request, 'user/delete_contact.html', context)
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def createStayHomeRecordAdmin(request):
     class StayHomeRecordFullForm(ModelForm):
         # user = models.ForeignKey(User)
@@ -449,7 +475,8 @@ def createStayHomeRecordAdmin(request):
     if request.method == 'POST':
         form = StayHomeRecordFullForm(request.POST)
         if form.is_valid():
-            userInfo = UserInfo.objects.filter(relate=request.user)[0]
+            print(request)
+            userInfo = UserInfo.objects.filter(relate=form.cleaned_data['user'])[0]
             obj = form.save()
             return redirect('homepage')
         else:
@@ -659,6 +686,8 @@ def get_k(grouped_persons):  # 获得k值（传入字典型泛化结果）
     for group in tmpDict:  # 遍历tmpDict，取出最小的person个数，赋值给k
         if k is None or tmpDict[group] < k:
             k = tmpDict[group]
+    if not k:
+        k = 0
     return k  # 返回的k值即为泛化结果的k值
 
 

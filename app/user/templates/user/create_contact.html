@@ -1,0 +1,15 @@
+{% extends 'user/main.html' %} {% load static %} {% block content %}
+
+<form action="" method="POST">
+    {% csrf_token %} {{ form.errors }} {{ form.management_form }} 
+    {% for field in form %}
+        {% if field.name != "user" and field.name != "name" and field.name != "phone" and field.name != "time_uploaded" %}
+            {{field.name}}{{field}}
+        {% endif %}
+        <hr>
+    {% endfor %}
+
+    <input type="submit" name="Submit">
+</form>
+
+{% endblock content %}

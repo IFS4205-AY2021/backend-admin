@@ -31,3 +31,8 @@ class UserInfoForm(ModelForm):
     class Meta:
         model = UserInfo
         fields = '__all__'
+
+class ContactForm(ModelForm):
+    class Meta:
+        model = Contact
+        fields = '__all__'

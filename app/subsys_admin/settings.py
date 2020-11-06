@@ -87,7 +87,8 @@ DATABASES = {
     'default': {
         'NAME': 'subsys_admin',
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': os.environ['MYSQL_HOST'],
+        'HOST': 'ifs4205-ay2020-1-i.comp.nus.edu.sg',
+        # 'HOST': os.environ['MYSQL_HOST'],
         'PORT': os.environ['MYSQL_PORT'],
         'USER': os.environ['MYSQL_USER'],
         'PASSWORD': os.environ['MYSQL_PSWD'],

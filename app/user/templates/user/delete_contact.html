@@ -1,7 +1,7 @@
 {% extends 'user/main.html' %} {% load static %} {% block content %}
 <bold>Are you sure you want to delete "{{record}}"?</bold>
 
-<form action="{% url 'delete_record' record.id %}" method="POST">
+<form action="{% url 'delete_contact' record.id %}" method="POST">
     {% csrf_token %}
 
     <a href="{% url 'login' %}">Cancel</a>
