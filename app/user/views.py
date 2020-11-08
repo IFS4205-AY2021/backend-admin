@@ -734,7 +734,8 @@ def get_k(grouped_persons):  # 获得k值（传入字典型泛化结果）
 
 
 def export_csv(request, persons):
-
+    if len(user_list) < given_k:
+        return HttpResponse("Invalid Request")
     return render(request, "user/list_all.html", context={"data": persons})
 
 
@@ -868,9 +869,16 @@ def count_avg_P(request):
             id = user.phone
             contact_data = Contact.objects.all()
             for contact in contact_data:
-                if contact.user1 == id or contact.user2 == id:
-                    total_contact = total_contact + 1
-                    print(total_contact)
+                if contact.user1 == id:
+                    user = UserInfo.objects.filter(relate=contact.user2)
+                    if user.test_result == "True":
+                        total_contact += 1
+                        print(total_contact)
+                elif contact.user2 == id:
+                    user = UserInfo.objects.filter(relate=contact.user1)
+                    if user.test_result == "True":
+                        total_contact += 1
+                        print(total_contact)
 
         if person_no == 0:
             return HttpResponse("Invalid location")
@@ -931,6 +939,8 @@ def count_total_P(request):
     if request.POST:
         location = str(request.POST['location'])
         user_list = UserInfo.objects.filter(location=location)
+        if len(user_list) == 0:
+            return HttpResponse("Invalid request")
         P_num = user_list.filter(test_result="True").count()
         num = user_list.count()
         per = P_num / num * 100
